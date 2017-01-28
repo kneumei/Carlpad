@@ -1,0 +1,16 @@
+<div class="card">
+    <div class="card-header">
+        <h2> CARLBot Connection</h2>
+        <form class="form-inline">
+            <label for="connectionTypeControl" class="mr-2">Connection Type: </label>
+            <select class="custom-select mr-2" [(ngModel)] = "selectedConnectionType" name="carlbotConnectionType" id="connectionTypeControl">
+                <option *ngFor="let conn of connectionTypes" [ngValue]="conn">{{conn}}</option>
+            </select>
+            <button type="button" class="btn mr-2">Connect</button>
+            <button type="button" class="btn mr-2">Disconnect</button>
+        </form>
+    </div>
+    <div class="card-block">
+        <carlpad-connection-wifi-config *ngIf="selectedConnectionType === 'wifi'"></carlpad-connection-wifi-config>
+        <carlpad-connection-serial-config *ngIf="selectedConnectionType === 'serial'"></carlpad-connection-serial-config>
+</div>

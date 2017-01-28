@@ -1,13 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'App',
-  templateUrl:'app.component.html'
+  templateUrl:"app.component.html"
 })
-export class AppComponent implements OnInit {
-  public readonly name = 'electron-forge';
+export class AppComponent {
 
-  ngOnInit(): void {
-    console.log('component initialized');
-  }
 }

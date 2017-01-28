@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'carlpad-connection',
-  template: `<h3>Connection</h3>`  
+  templateUrl: 'carlpad-connection.component.html'
 })
 export class CarlpadConnection {
-
+  selectedConnectionType = 'wifi';
+  connectionTypes = ['wifi', 'serial']
 }
