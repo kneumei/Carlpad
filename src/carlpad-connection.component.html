@@ -6,8 +6,8 @@
             <select class="custom-select mr-2" [(ngModel)] = "selectedConnectionType" name="carlbotConnectionType" id="connectionTypeControl">
                 <option *ngFor="let conn of connectionTypes" [ngValue]="conn">{{conn}}</option>
             </select>
-            <button type="button" class="btn mr-2 btn-success">Connect</button>
-            <button type="button" class="btn mr-2 btn-warning">Disconnect</button>
+            <button type="button" class="btn mr-2 btn-success" [disabled]="isConnected" (click)="connect()">Connect</button>
+            <button type="button" class="btn mr-2 btn-danger" [disabled]="!isConnected" (click)="disconnect()">Disconnect</button>
         </form>
     </div>
     <div class="card-block">

@@ -13,12 +13,12 @@
     "noImplicitThis": true,
     "noUnusedParameters": true,
     "importHelpers": true,
-    "noEmitHelpers": true,
+    "noEmitHelpers": false,
     "module": "commonjs",
     "moduleResolution": "node",
     "pretty": true,
     "target": "es2015",
-    "outDir": "dist"
+    "outDir": "dist"  
   },
   "formatCodeOptions": {
     "indentSize": 2,

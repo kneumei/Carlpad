@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
-import {CarlpadConnectionConfig} from './carlpad-connection-config'
-import {CarlpadConnectionService} from './carlpad-connection.service';
+import { CarlpadConnectionConfig } from './carlpad-connection-config'
+import { CarlpadConnectionService } from './carlpad-connection.service';
 
 
 @Component({
@@ -12,12 +12,13 @@ import {CarlpadConnectionService} from './carlpad-connection.service';
   ],
 })
 export class CarlpadConnection {
- 
+
   selectedConnectionType = 'wifi';
   connectionTypes = ['wifi', 'serial']
 
-  constructor(private carlpadConnectionService: CarlpadConnectionService){ }
-
+  constructor(
+    private carlpadConnectionService: CarlpadConnectionService
+  ) {  }
 
   get isConnected(): boolean {
     return this.carlpadConnectionService.isConnected
