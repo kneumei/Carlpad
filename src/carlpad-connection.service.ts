@@ -33,6 +33,6 @@ export class CarlpadConnectionService {
     }
 
     private startConnection(config: CarlpadConnectionConfig){
-       ipcRenderer.send('connect', config);
+        ipcRenderer.send('connect', config);
     }
 }

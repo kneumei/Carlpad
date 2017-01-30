@@ -1,5 +1,9 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 
+import {CarlpadConnectionConfig} from './carlpad-connection-config';
+
+import {Socket, createConnection} from 'net';
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow: Electron.BrowserWindow | null;
@@ -55,6 +59,26 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
 
-ipcMain.on('connect', (event) =>{
-  event.sender.send('onConnected')
-})
+ipcMain.on('connect', (event, config: CarlpadConnectionConfig) =>{
+  if(config.connectionType === 'wifi'){
+    connectWifi(config.wifiIp, config.wifiPort)
+      .then(() =>  event.sender.send('onConnected'))
+      .catch((err) =>  {
+        console.log(err);
+        event.sender.send('connectionFailed')
+      })
+  } else if (config.connectionType === 'serial'){
+
+  }
+ 
+});
+
+let connectWifi = function(ip: string, port: number): Promise<Socket>{
+  return new Promise((resolve, reject) => {
+      let socket = createConnection({host : ip, port: port});
+      socket.on('connect', () => resolve(socket));
+      socket.on('error', (err) => reject(err));
+  });
+}
+
+

@@ -13,19 +13,22 @@ import { CarlpadConnectionService } from './carlpad-connection.service';
 })
 export class CarlpadConnection {
 
-  selectedConnectionType = 'wifi';
+  connectionConfig: CarlpadConnectionConfig;
   connectionTypes = ['wifi', 'serial']
 
   constructor(
     private carlpadConnectionService: CarlpadConnectionService
-  ) {  }
+  ) { 
+    this.connectionConfig = new CarlpadConnectionConfig();
+    this.connectionConfig.connectionType = 'wifi';
+   }
 
   get isConnected(): boolean {
     return this.carlpadConnectionService.isConnected
   }
 
   connect(): void {
-    this.carlpadConnectionService.connect(new CarlpadConnectionConfig())
+    this.carlpadConnectionService.connect(this.connectionConfig)
   }
 
   disconnect(): void {
