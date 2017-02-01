@@ -12,27 +12,35 @@ export class CarlpadConnectionService {
     constructor(zone: NgZone) {
         this._isConnected = false;
 
-        ipcRenderer.on('onConnected', () =>{
-            zone.run(() =>{
+        ipcRenderer.on('onConnected', () => {
+            zone.run(() => {
                 this._isConnected = true;
+            })
+        });
+
+        ipcRenderer.on('onDisconnected', () => {
+            zone.run(() => {
+                this._isConnected = false;
+            })
+        });
+
+        ipcRenderer.on('onError', (event, err) => {
+            zone.run(() => {
+                console.error(err);
             })
         });
     }
 
     connect(config: CarlpadConnectionConfig): void {
         this.connectionConfig = config;
-        this.startConnection(config); 
+        ipcRenderer.send('connect', config);
     }
 
     disconnect(): void {
-        this._isConnected = false;
+        ipcRenderer.send('disconnect');
     }
 
     get isConnected() {
         return this._isConnected;
-    }
-
-    private startConnection(config: CarlpadConnectionConfig){
-        ipcRenderer.send('connect', config);
     }
 }

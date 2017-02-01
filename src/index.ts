@@ -7,6 +7,7 @@ import {Socket, createConnection} from 'net';
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow: Electron.BrowserWindow | null;
+let socket: Socket;
 
 const isDevMode = process.execPath.match(/[\\/]electron/);
 
@@ -61,24 +62,23 @@ app.on('activate', () => {
 
 ipcMain.on('connect', (event, config: CarlpadConnectionConfig) =>{
   if(config.connectionType === 'wifi'){
-    connectWifi(config.wifiIp, config.wifiPort)
-      .then(() =>  event.sender.send('onConnected'))
-      .catch((err) =>  {
-        console.log(err);
-        event.sender.send('connectionFailed')
-      })
+    socket = connectWifi(config.wifiIp, config.wifiPort, event)
   } else if (config.connectionType === 'serial'){
 
   }
  
 });
 
-let connectWifi = function(ip: string, port: number): Promise<Socket>{
-  return new Promise((resolve, reject) => {
-      let socket = createConnection({host : ip, port: port});
-      socket.on('connect', () => resolve(socket));
-      socket.on('error', (err) => reject(err));
-  });
+ipcMain.on('disconnect', () =>{
+  socket.destroy();
+})
+
+let connectWifi = function(ip: string, port: number, event: any): Socket{
+   let socket = createConnection({host : ip, port: port});
+    socket.on('connect', () => event.sender.send('onConnected'));
+    socket.on('error', (err) => event.sender.send('onError', err));
+    socket.on('close', () => event.sender.send('onDisconnected'))
+    return socket;
 }
 
 

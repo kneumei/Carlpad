@@ -18,10 +18,10 @@ export class CarlpadConnection {
 
   constructor(
     private carlpadConnectionService: CarlpadConnectionService
-  ) { 
+  ) {
     this.connectionConfig = new CarlpadConnectionConfig();
     this.connectionConfig.connectionType = 'wifi';
-   }
+  }
 
   get isConnected(): boolean {
     return this.carlpadConnectionService.isConnected
