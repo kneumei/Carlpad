@@ -10,11 +10,13 @@ export class CarlpadConnectionService {
     private connectionConfig: CarlpadConnectionConfig;
     private _isConnected: boolean;
     private subject = new BehaviorSubject(false);
+    private _error: any
 
     constructor(zone: NgZone) {
         this._isConnected = false;
 
         ipcRenderer.on('onConnected', () => {
+            this._error = null;
             zone.run(() => this.subject.next(true));
         });
 
@@ -23,7 +25,10 @@ export class CarlpadConnectionService {
         });
 
         ipcRenderer.on('onError', (event, err) => {
-            zone.run(() => this.subject.error(err));
+            zone.run(() => {
+                this._error = err;
+                this.subject.next(false)
+            });
         });
     }
 
@@ -43,5 +48,9 @@ export class CarlpadConnectionService {
     get connectionStateObservable(): Subject<boolean>
     {
         return this.subject;
+    }
+
+    get connectionError(): any {
+        return this._error;
     }
 }
