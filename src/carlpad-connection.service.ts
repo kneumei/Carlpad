@@ -1,6 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
 import { ipcRenderer } from 'electron';
-import {BehaviorSubject, Subject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 
 import { CarlpadConnectionConfig } from './carlpad-connection-config';
 
@@ -33,6 +33,7 @@ export class CarlpadConnectionService {
     }
 
     send(data: string){
+        console.log(data);
         ipcRenderer.send('send', data);
     }
 
@@ -45,7 +46,7 @@ export class CarlpadConnectionService {
         ipcRenderer.send('disconnect');
     }
 
-    get connectionStateObservable(): Subject<boolean>
+    get connectionStateObservable(): Observable<boolean>
     {
         return this.subject;
     }

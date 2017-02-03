@@ -3,13 +3,15 @@ import { Observable } from 'rxjs';
 
 import { CarlpadConnectionConfig } from './carlpad-connection-config'
 import { CarlpadConnectionService } from './carlpad-connection.service';
+import {CarlpadGamepadService} from './carlpad-gamepad-service';
 
 
 @Component({
   selector: 'carlpad-connection',
   templateUrl: 'carlpad-connection.component.html',
   providers: [
-    CarlpadConnectionService
+    CarlpadConnectionService,
+    CarlpadGamepadService
   ],
 })
 export class CarlpadConnection implements OnInit {
@@ -17,22 +19,30 @@ export class CarlpadConnection implements OnInit {
   connectionConfig: CarlpadConnectionConfig;
   connectionTypes = ['wifi', 'serial']
   private connectionState = false;
+  private dataObservable: Observable<string>;
 
   constructor(
-    private carlpadConnectionService: CarlpadConnectionService
+    private carlpadConnectionService: CarlpadConnectionService,
+    private carlpadGamepadService: CarlpadGamepadService
   ) {
     this.connectionConfig = new CarlpadConnectionConfig();
     this.connectionConfig.connectionType = 'wifi';
+    this.dataObservable = Observable
+      .interval(1000)
+      .combineLatest(
+        this.carlpadConnectionService.connectionStateObservable,
+        (i, connectionState) => connectionState)
+      .filter( connectionState => connectionState)
+      .map(() => this.carlpadGamepadService.gamepadData)
+      .share();
   }
 
   ngOnInit() {
-
-    const updateConnectionState = (state: boolean) => {
-      this.connectionState = state;
-    }
-
     this.carlpadConnectionService.connectionStateObservable
-      .subscribe(updateConnectionState)
+      .subscribe(state =>  this.connectionState = state)
+
+    this.dataObservable
+      .subscribe( data => this.carlpadConnectionService.send(data));
   }
 
   get isConnected(): boolean {
