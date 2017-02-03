@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import {Observable} from 'rxjs';
 
 import { CarlpadConnectionConfig } from './carlpad-connection-config'
 import { CarlpadConnectionService } from './carlpad-connection.service';
@@ -11,10 +12,12 @@ import { CarlpadConnectionService } from './carlpad-connection.service';
     CarlpadConnectionService
   ],
 })
-export class CarlpadConnection {
+export class CarlpadConnection implements OnInit {
 
   connectionConfig: CarlpadConnectionConfig;
   connectionTypes = ['wifi', 'serial']
+  private connectionState = false;
+  private error: any = null;
 
   constructor(
     private carlpadConnectionService: CarlpadConnectionService
@@ -23,8 +26,32 @@ export class CarlpadConnection {
     this.connectionConfig.connectionType = 'wifi';
   }
 
+  ngOnInit() {
+
+    const updateConnectionState = (state: boolean) => {
+      this.connectionState = state;
+      if (state) {
+        this.error = null;
+      }
+    }
+
+    const setError = (error: any): Observable<boolean> => {
+      this.connectionState = false;
+      this.error = error;
+      console.error(error);
+      return this.carlpadConnectionService.connectionStateObservable
+    }
+
+    this.carlpadConnectionService.connectionStateObservable
+      .catch(setError)
+      .subscribe(
+          updateConnectionState,
+          () => console.error("ERR"), 
+          () => console.log('complete'))
+  }
+
   get isConnected(): boolean {
-    return this.carlpadConnectionService.isConnected
+    return this.connectionState;
   }
 
   connect(): void {
