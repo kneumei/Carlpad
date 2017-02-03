@@ -6,7 +6,7 @@ import {AppComponent} from './app.component'
 import {CarlpadConnection} from './carlpad-connection.component';
 import {CarlpadConnectionWifiConfig} from './carlpad-connection-wifi-config.component';
 import {CarlpadConnectionSerialConfig} from './carlpad-connection-serial-config.component';
-
+import {CarlpadDataPreview} from './carlpad-data-preview.component';
 
 @NgModule({
   imports: [
@@ -17,7 +17,8 @@ import {CarlpadConnectionSerialConfig} from './carlpad-connection-serial-config.
       AppComponent,
       CarlpadConnection,
       CarlpadConnectionWifiConfig,
-      CarlpadConnectionSerialConfig
+      CarlpadConnectionSerialConfig,
+      CarlpadDataPreview
     ],
   bootstrap: [AppComponent]
 })

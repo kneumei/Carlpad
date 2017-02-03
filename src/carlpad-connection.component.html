@@ -16,9 +16,19 @@
         </div>
     </div>
     <div class="card-block">
-        <carlpad-connection-wifi-config [connectionConfig]="connectionConfig" *ngIf="connectionConfig.connectionType === 'wifi'">
-        </carlpad-connection-wifi-config>
-        <carlpad-connection-serial-config [connectionConfig]="connectionConfig" *ngIf="connectionConfig.connectionType === 'serial'">
-        </carlpad-connection-serial-config>
+        <div class="row">
+            <carlpad-connection-wifi-config
+                class="col-6" 
+                [connectionConfig]="connectionConfig" 
+                *ngIf="connectionConfig.connectionType === 'wifi'">
+            </carlpad-connection-wifi-config>
+            <carlpad-connection-serial-config 
+                class="col-6" 
+                [connectionConfig]="connectionConfig" 
+                *ngIf="connectionConfig.connectionType === 'serial'">
+            </carlpad-connection-serial-config>
+            <carlpad-data-preview class="col-6" [dataObservable]="dataObservable">
+            </carlpad-data-preview>
+        </div>
     </div>
 </div>

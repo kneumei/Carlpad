@@ -1,6 +1,6 @@
-import { Injectable, NgZone } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { ipcRenderer } from 'electron';
-import {BehaviorSubject, Observable} from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { CarlpadConnectionConfig } from './carlpad-connection-config';
 
@@ -12,23 +12,19 @@ export class CarlpadConnectionService {
     private subject = new BehaviorSubject(false);
     private _error: any
 
-    constructor(zone: NgZone) {
+    constructor() {
         this._isConnected = false;
 
         ipcRenderer.on('onConnected', () => {
             this._error = null;
-            zone.run(() => this.subject.next(true));
+            this.subject.next(true);
         });
 
-        ipcRenderer.on('onDisconnected', () => {
-            zone.run(() => this.subject.next(false));
-        });
+        ipcRenderer.on('onDisconnected', () => this.subject.next(false));
 
         ipcRenderer.on('onError', (event, err) => {
-            zone.run(() => {
-                this._error = err;
-                this.subject.next(false)
-            });
+            this._error = err;
+            this.subject.next(false)
         });
     }
 

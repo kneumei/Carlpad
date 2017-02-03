@@ -19,7 +19,7 @@ export class CarlpadConnection implements OnInit {
   connectionConfig: CarlpadConnectionConfig;
   connectionTypes = ['wifi', 'serial']
   private connectionState = false;
-  private dataObservable: Observable<string>;
+  private _dataObservable: Observable<string>;
 
   constructor(
     private carlpadConnectionService: CarlpadConnectionService,
@@ -27,7 +27,7 @@ export class CarlpadConnection implements OnInit {
   ) {
     this.connectionConfig = new CarlpadConnectionConfig();
     this.connectionConfig.connectionType = 'wifi';
-    this.dataObservable = Observable
+    this._dataObservable = Observable
       .interval(1000)
       .combineLatest(
         this.carlpadConnectionService.connectionStateObservable,
@@ -41,7 +41,7 @@ export class CarlpadConnection implements OnInit {
     this.carlpadConnectionService.connectionStateObservable
       .subscribe(state =>  this.connectionState = state)
 
-    this.dataObservable
+    this._dataObservable
       .subscribe( data => this.carlpadConnectionService.send(data));
   }
 
@@ -51,6 +51,10 @@ export class CarlpadConnection implements OnInit {
 
   get error(): any {
     return this.carlpadConnectionService.connectionError
+  }
+
+  get dataObservable(): Observable<string> {
+    return this._dataObservable;
   }
 
   connect(): void {
