@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ElementRef, ViewChild, AfterViewChecked} from '@angular/core';
+import { Component, Input, OnInit, ElementRef, ViewChild, AfterViewChecked } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
         </ul>
     </div>
     `,
-    styles:[
+    styles: [
         `.preview {
             background: black; 
             color: green; 
@@ -36,20 +36,20 @@ export class CarlpadDataPreview implements OnInit, AfterViewChecked {
     @ViewChild('scrollMe') private myScrollContainer: ElementRef;
     private readonly outputBufferLength = 100;
 
-    ngOnInit(){
-        this.dataObservable.subscribe((data) => {          
+    ngOnInit() {
+        this.dataObservable.subscribe((data) => {
             this._data.push("> " + data);
-            while(this._data.length > this.outputBufferLength){
+            while (this._data.length > this.outputBufferLength) {
                 this._data.shift();
             }
         })
     }
 
-    ngAfterViewChecked() {        
-          this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
-    } 
+    ngAfterViewChecked() {
+        this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+    }
 
-    get data(){
+    get data() {
         return this._data;
     }
 }

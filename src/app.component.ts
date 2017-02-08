@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'App',
-  template:`
+  template: `
   <div id="app">
     <div id="sidebar">
       <div>
       <div class="selectbox" [class.selecthidden] = "selected!=='connection'"></div>
       <i class="fa fa-3x fa-exchange" (click)="selected='connection'"></i>
-      </div>
+      </div> 
 
       <div>
       <div class="selectbox" [class.selecthidden] = "selected!=='gamepad'"></div>
@@ -20,7 +20,7 @@ import { Component } from '@angular/core';
     </div>
   </div>
   `,
-  styles:[
+  styles: [
     `#app{
     }`,
     `#sidebar {

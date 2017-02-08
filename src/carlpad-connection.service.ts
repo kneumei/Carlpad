@@ -28,7 +28,7 @@ export class CarlpadConnectionService {
         });
     }
 
-    send(data: string){
+    send(data: string) {
         console.log(data);
         ipcRenderer.send('send', data);
     }
@@ -42,8 +42,7 @@ export class CarlpadConnectionService {
         ipcRenderer.send('disconnect');
     }
 
-    get connectionStateObservable(): Observable<boolean>
-    {
+    get connectionStateObservable(): Observable<boolean> {
         return this.subject;
     }
 
