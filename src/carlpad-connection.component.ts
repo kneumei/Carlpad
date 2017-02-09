@@ -4,16 +4,12 @@ import { ipcRenderer } from 'electron';
 
 import { CarlpadConnectionConfig } from './carlpad-connection-config'
 import { CarlpadConnectionService } from './carlpad-connection.service';
-import { CarlpadGamepadService } from './carlpad-gamepad-service';
+import { CarlpadGamepadService } from './carlpad-gamepad.service';
 
 
 @Component({
   selector: 'carlpad-connection',
   templateUrl: 'carlpad-connection.component.html',
-  providers: [
-    CarlpadConnectionService,
-    CarlpadGamepadService
-  ],
 })
 export class CarlpadConnection implements OnInit {
 

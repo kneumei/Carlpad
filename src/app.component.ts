@@ -17,6 +17,7 @@ import { Component } from '@angular/core';
     </div>
     <div id="content">
       <carlpad-connection *ngIf="selected === 'connection'"></carlpad-connection>
+      <carlpad-gamepad *ngIf="selected === 'gamepad'"></carlpad-gamepad>
     </div>
   </div>
   `,

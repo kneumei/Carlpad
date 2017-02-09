@@ -69,6 +69,10 @@ ipcMain.on('loadConnectionConfig', (event) => {
     .then((value) => event.sender.send('onLoadConnectionConfig', value));
 })
 
+ipcMain.on('send', (event, data: string) => {
+  socket.write(data + "\n");
+})
+
 let connectWifi = function (config: CarlpadConnectionConfig, event: any): Socket {
   let socket = createConnection({ host: config.wifiIp, port: config.wifiPort });
   socket.on('connect', () => {

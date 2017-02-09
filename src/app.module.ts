@@ -7,6 +7,10 @@ import { CarlpadConnection } from './carlpad-connection.component';
 import { CarlpadConnectionWifiConfig } from './carlpad-connection-wifi-config.component';
 import { CarlpadConnectionSerialConfig } from './carlpad-connection-serial-config.component';
 import { CarlpadDataPreview } from './carlpad-data-preview.component';
+import { CarlpadGamepad } from './carlpad-gamepad-config.component';
+
+import { CarlpadConnectionService } from './carlpad-connection.service';
+import { CarlpadGamepadService } from './carlpad-gamepad.service';
 
 @NgModule({
   imports: [
@@ -18,7 +22,12 @@ import { CarlpadDataPreview } from './carlpad-data-preview.component';
     CarlpadConnection,
     CarlpadConnectionWifiConfig,
     CarlpadConnectionSerialConfig,
-    CarlpadDataPreview
+    CarlpadDataPreview,
+    CarlpadGamepad
+  ],
+  providers: [
+    CarlpadConnectionService,
+    CarlpadGamepadService
   ],
   bootstrap: [AppComponent]
 })
