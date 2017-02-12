@@ -4,11 +4,20 @@ const settings = require('electron-settings');
 import * as _ from 'lodash';
 
 import { CarlpadConnectionConfig } from './carlpad-connection-config';
+import { CarlpadGamepadConfig } from './carlpad-gamepad-config';
+import { CarlpadAxisConfig } from './carlpad-axis-config'
 
 const isDevMode = process.execPath.match(/[\\/]electron/);
 const appSettings = settings.getSync();
 let mainWindow: Electron.BrowserWindow | null;
 let socket: Socket;
+
+const defaultGamepadSettings = new CarlpadGamepadConfig();
+defaultGamepadSettings.id = "Rock Candy Gamepad for PS3 (Vendor: 0e6f Product: 011e)";
+defaultGamepadSettings.axes = [
+  new CarlpadAxisConfig(1, false),
+  new CarlpadAxisConfig(5, false)
+]
 
 const createWindow = async () => {
   mainWindow = new BrowserWindow({
@@ -67,6 +76,11 @@ ipcMain.on('disconnect', () => {
 ipcMain.on('loadConnectionConfig', (event) => {
   settings.get('connectionConfig')
     .then((value) => event.sender.send('onLoadConnectionConfig', value));
+})
+
+ipcMain.on('loadGamepadConfig', (event) => {
+  settings.get('gamepadConfig')
+    .then((value) => event.sender.send('onLoadGamepadConfig', value || defaultGamepadSettings))
 })
 
 ipcMain.on('send', (event, data: string) => {

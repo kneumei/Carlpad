@@ -1,9 +1,18 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
+import { ipcRenderer } from 'electron';
+
+import { CarlpadAxisConfig } from './carlpad-axis-config';
+import { CarlpadGamepadConfig } from './carlpad-gamepad-config';
+
 
 @Injectable()
 export class CarlpadGamepadService {
+
+    private _gamepad: Gamepad | undefined;
+    private _gamepadObservable: Observable<Gamepad>
+    private _gamepadConfig: CarlpadGamepadConfig
 
     constructor() {
         window.addEventListener('gamepadconnected', (connectedEvent: any) => {
@@ -21,23 +30,30 @@ export class CarlpadGamepadService {
             }
         });
 
+        ipcRenderer.on('onLoadGamepadConfig', (event, config: CarlpadGamepadConfig) => {
+            console.log(config)
+            this._gamepadConfig = config;
+        });
+
         this._gamepadObservable = Observable
             .interval(250)
             .map(() => this.currentGamepad)
             .share();
-    }
 
-    private _gamepad: Gamepad | undefined;
-    private _gamepadObservable: Observable<Gamepad>
+        ipcRenderer.send('loadGamepadConfig');
+    }
 
     get gamepadData(): string {
 
         var gamepad = this.currentGamepad;
 
         if (!gamepad) return '90,90'
+        if (!this._gamepadConfig) return '90,90';
+        var gamepadConfig = _.find([this._gamepadConfig], (config) => config.id === gamepad.id);
+        if (!gamepadConfig) return '90,90';
 
-        let leftWheel = this.toOutputValue(gamepad.axes[1]);
-        let rightWheel = this.toOutputValue(gamepad.axes[5]);
+        let leftWheel = this.toOutputValue(gamepad.axes[gamepadConfig.axes[0].index]);
+        let rightWheel = this.toOutputValue(gamepad.axes[gamepadConfig.axes[1].index]);
         return [leftWheel, rightWheel].join(",");
     }
 
