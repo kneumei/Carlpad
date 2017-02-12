@@ -8,6 +8,7 @@ import { CarlpadConnectionWifiConfig } from './carlpad-connection-wifi-config.co
 import { CarlpadConnectionSerialConfig } from './carlpad-connection-serial-config.component';
 import { CarlpadDataPreview } from './carlpad-data-preview.component';
 import { CarlpadGamepad } from './carlpad-gamepad-config.component';
+import { CarlpadGamepadAxis } from './carlpad-gamepad-axis.component';
 
 import { CarlpadConnectionService } from './carlpad-connection.service';
 import { CarlpadGamepadService } from './carlpad-gamepad.service';
@@ -23,7 +24,8 @@ import { CarlpadGamepadService } from './carlpad-gamepad.service';
     CarlpadConnectionWifiConfig,
     CarlpadConnectionSerialConfig,
     CarlpadDataPreview,
-    CarlpadGamepad
+    CarlpadGamepad,
+    CarlpadGamepadAxis
   ],
   providers: [
     CarlpadConnectionService,
