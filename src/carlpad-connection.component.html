@@ -1,7 +1,7 @@
 <div class="card">
     <div class="card-header">
         <h2> CARLBot Connection</h2>
-        <form class="form-inline">
+        <form class="form-inline" *ngIf="connectionConfig">
             <label for="connectionTypeControl" class="mr-2">Connection Type: </label>
             <select class="custom-select mr-2" [(ngModel)]="connectionConfig.connectionType" name="carlbotConnectionType" id="connectionTypeControl">
                 <option *ngFor="let conn of connectionTypes" [ngValue]="conn">{{conn}}</option>
@@ -15,7 +15,7 @@
             </div>
         </div>
     </div>
-    <div class="card-block">
+    <div class="card-block" *ngIf="connectionConfig">
         <div class="row">
             <carlpad-connection-wifi-config class="col-6" [connectionConfig]="connectionConfig" *ngIf="connectionConfig.connectionType === 'wifi'">
             </carlpad-connection-wifi-config>

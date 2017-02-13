@@ -22,8 +22,6 @@ export class CarlpadConnection implements OnInit {
     private carlpadConnectionService: CarlpadConnectionService,
     private carlpadGamepadService: CarlpadGamepadService
   ) {
-    this.connectionConfig = new CarlpadConnectionConfig();
-    this.connectionConfig.connectionType = 'wifi';
     this._dataObservable = Observable
       .interval(1000)
       .combineLatest(

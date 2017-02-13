@@ -29,7 +29,6 @@ export class CarlpadConnectionService {
     }
 
     send(data: string) {
-        console.log(data);
         ipcRenderer.send('send', data);
     }
 

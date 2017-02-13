@@ -1,8 +1,8 @@
 export class CarlpadConnectionConfig {
     connectionType: string;
 
-    wifiIp: string = "localhost";
-    wifiPort: number = 1234;
+    wifiIp: string;
+    wifiPort: number;
 
     serialComPort: number;
     serialBitRate: number;

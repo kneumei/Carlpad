@@ -23,6 +23,7 @@ export class CarlpadGamepadService {
                 this._gamepad = gamepad;
             }
         });
+
         window.addEventListener('gamepaddisconnected', (disconnectedEvent: any) => {
             let gamepad = (disconnectedEvent.gamepad) as Gamepad;
             if (this._gamepad && this._gamepad.id === gamepad.id) {
@@ -31,7 +32,6 @@ export class CarlpadGamepadService {
         });
 
         ipcRenderer.on('onLoadGamepadConfig', (event, config: CarlpadGamepadConfig) => {
-            console.log(config)
             this._gamepadConfig = config;
         });
 
@@ -52,9 +52,15 @@ export class CarlpadGamepadService {
         var gamepadConfig = _.find([this._gamepadConfig], (config) => config.id === gamepad.id);
         if (!gamepadConfig) return '90,90';
 
-        let leftWheel = this.toOutputValue(gamepad.axes[gamepadConfig.axes[0].index]);
-        let rightWheel = this.toOutputValue(gamepad.axes[gamepadConfig.axes[1].index]);
-        return [leftWheel, rightWheel].join(",");
+        let values = gamepad.axes
+            .map((value, index) => {
+                var axisConfig = _.find(gamepadConfig.axes, (axisConfig) => axisConfig.index === index);
+                return { value, axisConfig }
+            })
+            .filter((axis) => axis.axisConfig && axis.axisConfig.selected)
+            .map((axis) => this.toOutputValue(axis.value, axis.axisConfig))
+
+        return values.join(",");
     }
 
     get gamepad() {
@@ -69,7 +75,11 @@ export class CarlpadGamepadService {
         return this._gamepadObservable;
     }
 
-    toOutputValue(inputValue: number) {
+    get gamepadConfig(): CarlpadGamepadConfig {
+        return this._gamepadConfig;
+    }
+
+    toOutputValue(inputValue: number, axisConfig: CarlpadAxisConfig) {
         function mapServo(value: number) {
             return mapRange(value * 100, -100, 100, 0, 180);
         }
@@ -78,6 +88,18 @@ export class CarlpadGamepadService {
             return Math.round((value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin);
         }
 
+        if(axisConfig.inverted){
+            inputValue = inputValue * -1;
+        }
+
         return mapServo(inputValue);
+    }
+
+    saveConfiguration() {
+        ipcRenderer.send('saveGamepadConfiguration', this.gamepadConfig);
+    }
+
+    resetConfiguration() {
+        ipcRenderer.send('resetGamepadConfig');
     }
 }

@@ -15,9 +15,18 @@ let socket: Socket;
 const defaultGamepadSettings = new CarlpadGamepadConfig();
 defaultGamepadSettings.id = "Rock Candy Gamepad for PS3 (Vendor: 0e6f Product: 011e)";
 defaultGamepadSettings.axes = [
-  new CarlpadAxisConfig(1, false),
-  new CarlpadAxisConfig(5, false)
+  new CarlpadAxisConfig(1, true, false),
+  new CarlpadAxisConfig(5, true, false)
 ]
+
+const defaultConnectionConfig = new CarlpadConnectionConfig();
+defaultConnectionConfig.connectionType = 'wifi';
+defaultConnectionConfig.wifiIp = "127.0.0.1";
+defaultConnectionConfig.wifiPort = 1234;
+
+settings.configure({
+  prettify: true
+});
 
 const createWindow = async () => {
   mainWindow = new BrowserWindow({
@@ -75,7 +84,7 @@ ipcMain.on('disconnect', () => {
 
 ipcMain.on('loadConnectionConfig', (event) => {
   settings.get('connectionConfig')
-    .then((value) => event.sender.send('onLoadConnectionConfig', value));
+    .then((value) => event.sender.send('onLoadConnectionConfig', value || defaultConnectionConfig));
 })
 
 ipcMain.on('loadGamepadConfig', (event) => {
@@ -86,6 +95,15 @@ ipcMain.on('loadGamepadConfig', (event) => {
 ipcMain.on('send', (event, data: string) => {
   socket.write(data + "\n");
 })
+
+ipcMain.on('saveGamepadConfiguration', (event, gamepadConfig: CarlpadGamepadConfig) => {
+  settings.setSync("gamepadConfig", gamepadConfig);
+});
+
+ipcMain.on('resetGamepadConfig', (event) => {
+  settings.delete("gamepadConfig");
+  event.sender.send('onLoadGamepadConfig', defaultGamepadSettings);
+});
 
 let connectWifi = function (config: CarlpadConnectionConfig, event: any): Socket {
   let socket = createConnection({ host: config.wifiIp, port: config.wifiPort });
