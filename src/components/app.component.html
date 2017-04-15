@@ -1,16 +1,16 @@
 <div id="app">
-    <div id="sidebar">
-        <div>
-            <div class="selectbox" [class.selecthidden]="selected!=='connection'"></div>
-            <i class="fa fa-3x fa-exchange" (click)="selected='connection'"></i>
-        </div>
-        <div>
-            <div class="selectbox" [class.selecthidden]="selected!=='gamepad'"></div>
-            <i class="fa fa-3x fa-gamepad" (click)="selected='gamepad'"></i>
-        </div>
+  <div id="sidebar">
+    <div>
+      <div class="selectbox" [class.selecthidden]="selected!=='connection'"></div>
+      <i class="fa fa-3x fa-exchange" (click)="selected='connection'"></i>
     </div>
-    <div id="content">
-        <connection *ngIf="selected === 'connection'"></connection>
-        <gamepad *ngIf="selected === 'gamepad'"></gamepad>
+    <div>
+      <div class="selectbox" [class.selecthidden]="selected!=='gamepad'"></div>
+      <i class="fa fa-3x fa-gamepad" (click)="selected='gamepad'"></i>
     </div>
+  </div>
+  <div id="content">
+    <connection *ngIf="selected === 'connection'"></connection>
+    <gamepad *ngIf="selected === 'gamepad'"></gamepad>
+  </div>
 </div>

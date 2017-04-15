@@ -1,28 +1,28 @@
 <div class="card">
-    <div class="card-header">
-        <h2> CARLBot Connection</h2>
-        <form class="form-inline" *ngIf="connectionConfig">
-            <label for="connectionTypeControl" class="mr-2">Connection Type: </label>
-            <select class="custom-select mr-2" [(ngModel)]="connectionConfig.connectionType" name="carlbotConnectionType" id="connectionTypeControl">
+  <div class="card-header">
+    <h2> CARLBot Connection</h2>
+    <form class="form-inline" *ngIf="connectionConfig">
+      <label for="connectionTypeControl" class="mr-2">Connection Type: </label>
+      <select class="custom-select mr-2" [(ngModel)]="connectionConfig.connectionType" name="carlbotConnectionType" id="connectionTypeControl">
                 <option *ngFor="let conn of connectionTypes" [ngValue]="conn">{{conn}}</option>
             </select>
-            <button type="button" class="btn mr-2 btn-success" [disabled]="isConnected" (click)="connect()">Connect</button>
-            <button type="button" class="btn mr-2 btn-danger" [disabled]="!isConnected" (click)="disconnect()">Disconnect</button>
-        </form>
-        <div class="row" *ngIf="error">
-            <div class="alert alert-danger" role="alert">
-                Oops! Something went wrong with the connection. Error code: <strong>{{error.code}}</strong>
-            </div>
-        </div>
+      <button type="button" class="btn mr-2 btn-success" [disabled]="isConnected" (click)="connect()">Connect</button>
+      <button type="button" class="btn mr-2 btn-danger" [disabled]="!isConnected" (click)="disconnect()">Disconnect</button>
+    </form>
+    <div class="row" *ngIf="error">
+      <div class="alert alert-danger" role="alert">
+        Oops! Something went wrong with the connection. Error code: <strong>{{error.code}}</strong>
+      </div>
     </div>
-    <div class="card-block" *ngIf="connectionConfig">
-        <div class="row">
-            <connection-wifi-config class="col-6" [connectionConfig]="connectionConfig" *ngIf="connectionConfig.connectionType === 'wifi'">
-            </connection-wifi-config>
-            <connection-serial-config class="col-6" [connectionConfig]="connectionConfig" *ngIf="connectionConfig.connectionType === 'serial'">
-            </connection-serial-config>
-            <data-preview class="col-6" [dataObservable]="dataObservable">
-            </data-preview>
-        </div>
+  </div>
+  <div class="card-block" *ngIf="connectionConfig">
+    <div class="row">
+      <connection-wifi-config class="col-6" [connectionConfig]="connectionConfig" *ngIf="connectionConfig.connectionType === 'wifi'">
+      </connection-wifi-config>
+      <connection-serial-config class="col-6" [connectionConfig]="connectionConfig" *ngIf="connectionConfig.connectionType === 'serial'">
+      </connection-serial-config>
+      <data-preview class="col-6" [dataObservable]="dataObservable">
+      </data-preview>
     </div>
+  </div>
 </div>

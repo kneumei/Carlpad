@@ -19,7 +19,7 @@ import { GamepadService } from './services/gamepad.service';
     FormsModule
   ],
   declarations: [
-   AppComponent,
+    AppComponent,
     Connection,
     ConnectionWifiConfig,
     ConnectionSerialConfig,

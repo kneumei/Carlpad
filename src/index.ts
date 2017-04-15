@@ -94,7 +94,7 @@ ipcMain.on('send', (event: any, data: string) => {
 })
 
 ipcMain.on('saveGamepadConfiguration', (event: any, gamepadConfig: CarlpadGamepadConfig) => {
-  settings.set("gamepadConfig", gamepadConfig, {prettify: true});
+  settings.set("gamepadConfig", gamepadConfig, { prettify: true });
 });
 
 ipcMain.on('resetGamepadConfig', (event) => {

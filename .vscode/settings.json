@@ -1,6 +1,4 @@
 {
 	"typescript.tsdk": "./node_modules/typescript/lib",
-	"editor.insertSpaces": true,
-	"html.format.enable": true,
-	"editor.tabSize": 4
+	"html.format.enable": true
 }
