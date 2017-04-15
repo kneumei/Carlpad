@@ -3,12 +3,11 @@ import { Socket, createConnection } from 'net';
 const settings = require('electron-settings');
 import * as _ from 'lodash';
 
-import { CarlpadConnectionConfig } from './carlpad-connection-config';
-import { CarlpadGamepadConfig } from './carlpad-gamepad-config';
-import { CarlpadAxisConfig } from './carlpad-axis-config'
+import { ConnectionConfig } from './models/connection-config';
+import { CarlpadGamepadConfig } from './models/gamepad-config';
+import { CarlpadAxisConfig } from './models/axis-config'
 
 const isDevMode = process.execPath.match(/[\\/]electron/);
-const appSettings = settings.getSync();
 let mainWindow: Electron.BrowserWindow | null;
 let socket: Socket;
 
@@ -19,16 +18,13 @@ defaultGamepadSettings.axes = [
   new CarlpadAxisConfig(5, true, false)
 ]
 
-const defaultConnectionConfig = new CarlpadConnectionConfig();
+const defaultConnectionConfig = new ConnectionConfig();
 defaultConnectionConfig.connectionType = 'wifi';
 defaultConnectionConfig.wifiIp = "127.0.0.1";
 defaultConnectionConfig.wifiPort = 1234;
 
-settings.configure({
-  prettify: true
-});
-
 const createWindow = async () => {
+  let appSettings = settings.getAll();
   mainWindow = new BrowserWindow({
     width: _.get(appSettings, 'window.width', 1400),
     height: _.get(appSettings, 'window.height', 800),
@@ -40,7 +36,7 @@ const createWindow = async () => {
     y: _.get(appSettings, 'window.y', undefined)
   });
 
-  console.log(settings.getSettingsFilePath());
+  console.log(settings.file());
 
   mainWindow.loadURL(`file://${__dirname}/index.html`);
 
@@ -53,6 +49,7 @@ const createWindow = async () => {
   });
 
   mainWindow.on('move', _.debounce(saveWindowPosition, 150));
+
 };
 
 app.on('ready', createWindow);
@@ -70,7 +67,7 @@ app.on('activate', () => {
   }
 });
 
-ipcMain.on('connect', (event, config: CarlpadConnectionConfig) => {
+ipcMain.on('connect', (event, config: ConnectionConfig) => {
   if (config.connectionType === 'wifi') {
     socket = connectWifi(config, event)
   } else if (config.connectionType === 'serial') {
@@ -83,21 +80,21 @@ ipcMain.on('disconnect', () => {
 })
 
 ipcMain.on('loadConnectionConfig', (event) => {
-  settings.get('connectionConfig')
-    .then((value) => event.sender.send('onLoadConnectionConfig', value || defaultConnectionConfig));
+  let connectionConfig = settings.get('connectionConfig')
+  event.sender.send('onLoadConnectionConfig', connectionConfig || defaultConnectionConfig);
 })
 
 ipcMain.on('loadGamepadConfig', (event) => {
-  settings.get('gamepadConfig')
-    .then((value) => event.sender.send('onLoadGamepadConfig', value || defaultGamepadSettings))
+  let gamepadConfig = settings.get('gamepadConfig')
+  event.sender.send('onLoadGamepadConfig', gamepadConfig || defaultGamepadSettings);
 })
 
-ipcMain.on('send', (event, data: string) => {
+ipcMain.on('send', (event: any, data: string) => {
   socket.write(data + "\n");
 })
 
-ipcMain.on('saveGamepadConfiguration', (event, gamepadConfig: CarlpadGamepadConfig) => {
-  settings.setSync("gamepadConfig", gamepadConfig);
+ipcMain.on('saveGamepadConfiguration', (event: any, gamepadConfig: CarlpadGamepadConfig) => {
+  settings.set("gamepadConfig", gamepadConfig, {prettify: true});
 });
 
 ipcMain.on('resetGamepadConfig', (event) => {
@@ -105,10 +102,10 @@ ipcMain.on('resetGamepadConfig', (event) => {
   event.sender.send('onLoadGamepadConfig', defaultGamepadSettings);
 });
 
-let connectWifi = function (config: CarlpadConnectionConfig, event: any): Socket {
+let connectWifi = function (config: ConnectionConfig, event: any): Socket {
   let socket = createConnection({ host: config.wifiIp, port: config.wifiPort });
   socket.on('connect', () => {
-    settings.set('connectionConfig', config);
+    settings.set('connectionConfig', config, { prettify: true });
     event.sender.send('onConnected')
   });
   socket.on('error', (err) => event.sender.send('onError', err));
@@ -120,11 +117,11 @@ let saveWindowPosition = function (): void {
   if (!mainWindow) return;
   const newPosition = mainWindow.getPosition();
   const windowSize = mainWindow.getSize();
-  settings.setSync("window", {
+  settings.set("window", {
     "width": windowSize[0],
     "height": windowSize[1],
     "x": newPosition[0],
     "y": newPosition[1]
-  });
+  }, { prettify: true });
 }
 

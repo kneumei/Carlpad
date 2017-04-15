@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { ipcRenderer } from 'electron';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { CarlpadConnectionConfig } from './carlpad-connection-config';
+import { ConnectionConfig } from '../models/connection-config';
 
 @Injectable()
-export class CarlpadConnectionService {
+export class ConnectionService {
 
-    private connectionConfig: CarlpadConnectionConfig;
+    private connectionConfig: ConnectionConfig;
     private _isConnected: boolean;
     private subject = new BehaviorSubject(false);
     private _error: any
@@ -32,7 +32,7 @@ export class CarlpadConnectionService {
         ipcRenderer.send('send', data);
     }
 
-    connect(config: CarlpadConnectionConfig): void {
+    connect(config: ConnectionConfig): void {
         this.connectionConfig = config;
         ipcRenderer.send('connect', config);
     }

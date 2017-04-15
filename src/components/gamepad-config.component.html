@@ -1,15 +1,7 @@
-import { Component } from '@angular/core';
-
-import { CarlpadGamepadService } from './carlpad-gamepad.service';
-
-
-@Component({
-    selector: 'carlpad-gamepad',
-    template: `
 <div class="card">
     <div class="card-header">
         <h2> CARLBot Gamepad Configuration</h2>
-         <form >
+        <form>
             <div class="form-group row">
                 <label for="gamepadId" class="col-3 col-form-label">Gamepad ID: </label>
                 <input class="form-control" *ngIf="gamepad" class="col-9" [(ngModel)]="gamepad.id" name="gamepadId" id="gamepadId" readonly/>
@@ -24,26 +16,8 @@ import { CarlpadGamepadService } from './carlpad-gamepad.service';
     </div>
     <div class="card-block" *ngIf=" gamepad">
         <div class="row">
-            <carlpad-gamepad-axis 
-                *ngFor="let axis of gamepad.axes; let i = index" 
-                [axisIndex]="i" >
-            </carlpad-gamepad-axis>
-        </div>  
+            <gamepad-axis *ngFor="let axis of gamepad.axes; let i = index" [axisIndex]="i">
+            </gamepad-axis>
+        </div>
     </div>
 </div>
-`
-})
-export class CarlpadGamepad {
-    constructor(
-        private carlpadGamepadService: CarlpadGamepadService
-    ) {
-    }
-
-    get gamepad(): Gamepad | undefined {
-        return this.carlpadGamepadService.gamepad;
-    }
-
-    resetConfiguration() {
-        this.carlpadGamepadService.resetConfiguration();
-    }
-}

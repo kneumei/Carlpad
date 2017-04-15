@@ -2,25 +2,25 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ipcRenderer } from 'electron';
 
-import { CarlpadConnectionConfig } from './carlpad-connection-config'
-import { CarlpadConnectionService } from './carlpad-connection.service';
-import { CarlpadGamepadService } from './carlpad-gamepad.service';
+import { ConnectionConfig } from '../models/connection-config'
+import { ConnectionService } from '../services/connection.service';
+import { GamepadService } from '../services/gamepad.service';
 
 
 @Component({
-  selector: 'carlpad-connection',
-  templateUrl: 'carlpad-connection.component.html',
+  selector: 'connection',
+  templateUrl: './components/connection.component.html',
 })
-export class CarlpadConnection implements OnInit {
+export class Connection implements OnInit {
 
-  connectionConfig: CarlpadConnectionConfig;
+  connectionConfig: ConnectionConfig;
   connectionTypes = ['wifi', 'serial']
   private connectionState = false;
   private _dataObservable: Observable<string>;
 
   constructor(
-    private carlpadConnectionService: CarlpadConnectionService,
-    private carlpadGamepadService: CarlpadGamepadService
+    private carlpadConnectionService: ConnectionService,
+    private carlpadGamepadService: GamepadService
   ) {
     this._dataObservable = Observable
       .interval(1000)
@@ -31,7 +31,7 @@ export class CarlpadConnection implements OnInit {
       .map(() => this.carlpadGamepadService.gamepadData)
       .share();
 
-    ipcRenderer.on('onLoadConnectionConfig', (event, config: CarlpadConnectionConfig) => {
+    ipcRenderer.on('onLoadConnectionConfig', (event, config: ConnectionConfig) => {
       this.connectionConfig = config;
     });
   }

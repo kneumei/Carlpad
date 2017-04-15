@@ -2,16 +2,16 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 
-import { AppComponent } from './app.component'
-import { CarlpadConnection } from './carlpad-connection.component';
-import { CarlpadConnectionWifiConfig } from './carlpad-connection-wifi-config.component';
-import { CarlpadConnectionSerialConfig } from './carlpad-connection-serial-config.component';
-import { CarlpadDataPreview } from './carlpad-data-preview.component';
-import { CarlpadGamepad } from './carlpad-gamepad-config.component';
-import { CarlpadGamepadAxis } from './carlpad-gamepad-axis.component';
+import { AppComponent } from './components/app.component'
+import { Connection } from './components/connection.component';
+import { ConnectionWifiConfig } from './components/connection-wifi-config.component';
+import { ConnectionSerialConfig } from './components/connection-serial-config.component';
+import { DataPreview } from './components/data-preview.component';
+import { CarlpadGamepad } from './components/gamepad-config.component';
+import { CarlpadGamepadAxis } from './components/gamepad-axis.component';
 
-import { CarlpadConnectionService } from './carlpad-connection.service';
-import { CarlpadGamepadService } from './carlpad-gamepad.service';
+import { ConnectionService } from './services/connection.service';
+import { GamepadService } from './services/gamepad.service';
 
 @NgModule({
   imports: [
@@ -19,17 +19,17 @@ import { CarlpadGamepadService } from './carlpad-gamepad.service';
     FormsModule
   ],
   declarations: [
-    AppComponent,
-    CarlpadConnection,
-    CarlpadConnectionWifiConfig,
-    CarlpadConnectionSerialConfig,
-    CarlpadDataPreview,
+   AppComponent,
+    Connection,
+    ConnectionWifiConfig,
+    ConnectionSerialConfig,
+    DataPreview,
     CarlpadGamepad,
     CarlpadGamepadAxis
   ],
   providers: [
-    CarlpadConnectionService,
-    CarlpadGamepadService
+    ConnectionService,
+    GamepadService
   ],
   bootstrap: [AppComponent]
 })

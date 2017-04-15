@@ -1,4 +1,4 @@
-export class CarlpadConnectionConfig {
+export class ConnectionConfig {
     connectionType: string;
 
     wifiIp: string;

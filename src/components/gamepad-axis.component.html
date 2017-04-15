@@ -1,0 +1,26 @@
+<div class="card" style="width: 20rem;">
+    <div class="card-header">
+        Axis: {{axisIndex}}
+        <span class="pull-right">
+        <label>
+            Selected: <input type="checkbox" [ngModel]="axisConfig.selected" (ngModelChange)="saveSelected($event)" >
+        </label>
+    </span>
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            <div class="col-9">Raw Value: </div>
+            <div class="col-3">{{rawValue}}</div>
+        </li>
+        <li class="list-group-item">
+            <div class="col-9">Output Value: </div>
+            <div class="col-3">{{outputValue}}</div>
+        </li>
+        <li class="list-group-item">
+            <div class="col-9">Invert: </div>
+            <div class="col-3">
+                <input type="checkbox" [ngModel]="axisConfig.inverted" (ngModelChange)="saveInverted($event)">
+            </div>
+        </li>
+    </ul>
+</div>

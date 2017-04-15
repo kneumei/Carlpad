@@ -3,12 +3,12 @@ import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { ipcRenderer } from 'electron';
 
-import { CarlpadAxisConfig } from './carlpad-axis-config';
-import { CarlpadGamepadConfig } from './carlpad-gamepad-config';
+import { CarlpadAxisConfig } from '../models/axis-config';
+import { CarlpadGamepadConfig } from '../models/gamepad-config';
 
 
 @Injectable()
-export class CarlpadGamepadService {
+export class GamepadService {
 
     private _gamepad: Gamepad | undefined;
     private _gamepadObservable: Observable<Gamepad>
@@ -68,6 +68,7 @@ export class CarlpadGamepadService {
     }
 
     get currentGamepad(): Gamepad | undefined {
+        if (!this.gamepad) return undefined;
         return _.find(navigator.getGamepads(), (gp) => gp.id === this.gamepad.id);
     }
 
